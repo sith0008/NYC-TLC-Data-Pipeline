@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 )
 
 type Trip struct {
@@ -20,10 +21,11 @@ type Trip struct {
 	Latitude  float64
 	Longitude float64
 	Status    string
+	Zone      string
 }
 
 func main() {
-	trips, err := os.Open("../train_processed.csv")
+	trips, err := os.Open("../data/trips.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,11 +50,13 @@ func main() {
 		tripStruct.Longitude, _ = strconv.ParseFloat(trip[3], 64)
 		tripStruct.Latitude, _ = strconv.ParseFloat(trip[4], 64)
 		tripStruct.Status = trip[5]
+		tripStruct.Zone = trip[6]
 		tripBytes, err := json.Marshal(tripStruct)
 		if err != nil {
 			log.Fatal(err)
 		}
 		sendRequest(tripBytes)
+		time.Sleep(1 * time.Second)
 	}
 }
 
