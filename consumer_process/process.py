@@ -110,6 +110,7 @@ def write_process(top_pickup_df=None, top_dropoff_df=None, duration_hist_df=None
         duration_json = construct_request(df,"duration")
         print(duration_json)
         requests.post("http://localhost:5000/duration",data=duration_json)
+        
     if top_pickup_df:
         top_pickup_stream = top_pickup_df.writeStream \
             .outputMode("complete") \
