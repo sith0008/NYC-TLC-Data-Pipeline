@@ -60,6 +60,6 @@ def get_duration():
     data_json = json.loads(data)
     counts = [0]*13
     for b in data_json['duration']:
-        counts[int(b['bin'])-1] = b['count']
+        counts[int(float(b['bin']))-1] = b['count']
     duration_counts = counts
     return "received"
