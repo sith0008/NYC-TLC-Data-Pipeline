@@ -87,19 +87,19 @@ def duration_process(complete_df):
     return duration_hist_df
 
 def write_process(top_pickup_df=None, top_dropoff_df=None, duration_hist_df=None):
-def construct_request(df,item_header):
-    items = df.toJSON().collect()
-    items_dict = {}
-    items_dict[item_header] = []
-    for item in items:
-        items_dict[item_header].append(eval(item))
-    items_json = json.dumps(items_dict)
-    return items_json
+    def construct_request(df,item_header):
+        items = df.toJSON().collect()
+        items_dict = {}
+        items_dict[item_header] = []
+        for item in items:
+            items_dict[item_header].append(eval(item))
+        items_json = json.dumps(items_dict)
+        return items_json
 
-def send_top_pickup_regions(df, epoch_id):
-    zones_json = construct_request(df,"top_pickup_zones")
-    print(zones_json)
-    requests.post("http://localhost:5000/top_pickup",data=zones_json)
+    def send_top_pickup_regions(df, epoch_id):
+        zones_json = construct_request(df,"top_pickup_zones")
+        print(zones_json)
+        requests.post("http://localhost:5000/top_pickup",data=zones_json)
         
     def send_top_dropoff_regions(df, epoch_id):
         zones_json = construct_request(df,"top_dropoff_zones")
