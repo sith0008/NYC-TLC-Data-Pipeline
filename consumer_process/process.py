@@ -87,19 +87,38 @@ def duration_process(complete_df):
     return duration_hist_df
 
 def write_process(top_pickup_df=None, top_dropoff_df=None, duration_hist_df=None):
-    def send_top_regions(df, epoch_id):
-        df.show()
+def construct_request(df,item_header):
+    items = df.toJSON().collect()
+    items_dict = {}
+    items_dict[item_header] = []
+    for item in items:
+        items_dict[item_header].append(eval(item))
+    items_json = json.dumps(items_dict)
+    return items_json
+
+def send_top_pickup_regions(df, epoch_id):
+    zones_json = construct_request(df,"top_pickup_zones")
+    print(zones_json)
+    requests.post("http://localhost:5000/top_pickup",data=zones_json)
+        
+    def send_top_dropoff_regions(df, epoch_id):
+        zones_json = construct_request(df,"top_dropoff_zones")
+        print(zones_json)
+        requests.post("http://localhost:5000/top_dropoff",data=zones_json)
+
     def send_duration(df, epoch_id):
-        df.show()
+        duration_json = construct_request(df,"duration")
+        print(duration_json)
+        requests.post("http://localhost:5000/duration",data=duration_json)
     if top_pickup_df:
         top_pickup_stream = top_pickup_df.writeStream \
             .outputMode("complete") \
-            .foreachBatch(send_top_regions) \
+            .foreachBatch(send_top_pickup_regions) \
             .start()
     if top_dropoff_df:
         top_dropoff_stream = top_dropoff_df.writeStream \
             .outputMode("complete") \
-            .foreachBatch(send_top_regions) \
+            .foreachBatch(send_top_dropoff_regions) \
             .start()
     if duration_hist_df:
         duration_stream = duration_hist_df.writeStream \
