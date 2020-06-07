@@ -39,15 +39,50 @@ The processors send the processed data in the form of JSON objects to a Flask ap
 ## Usage
 
 # Kafka server setup
+
+Kafka relies on Zookeeper for maintaining configuration information, so we have to start up the Zookeeper server first.
 ```bash
 ./kafka/bin/zookeeper-server-start.sh ./kafka/config/zookeeper.properties
+```
+```bash
 ./kafka/bin/kafka-server-start.sh ./kafka/config/server.properties
 ```
+
 # Flask app setup
+
+Before streaming, start the Flask app. 
+
+```bash
+cd dashboard
+flask run
+```
 
 # Consumer setup
 
+Start the storage consumer
+```bash
+cd consumer_store
+go run store.go
+```
+
+Start the processing consumer
+```bash
+cd consumer_process
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.5 process.py
+```
+
 # Producer setup
+
+Initialize server to handle incoming requests
+```bash
+cd producer
+go run producer-server.go
+```
+
+Run client to send requests
+```bash
+go run producer-client.go
+```
 
 
 
