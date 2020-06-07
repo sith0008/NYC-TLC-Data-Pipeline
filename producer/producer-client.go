@@ -56,7 +56,7 @@ func main() {
 			log.Fatal(err)
 		}
 		sendRequest(tripBytes)
-		time.Sleep(1 * time.Second)
+		time.Sleep(500 * time.Millisecond)
 	}
 }
 

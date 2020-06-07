@@ -58,6 +58,17 @@ def read_process():
 
     return start_df, end_df, complete_df
 
+def count_process(start_df, complete_df):
+    def get_time_bin(datetime):
+        hour = int(datetime.split(' ')[1].split(':')[0])
+        return hour
+    time_bin_udf = udf(lambda x: get_time_bin(x))
+    start_df = start_df.withColumn('hour',time_bin_udf(start_df['Datetime']))
+    total_count = start_df.groupBy('hour').count('TripID')
+    complete_df = complete_df.withColumn('hour',time_bin_udf(start_df['StartTime']))
+    complete_count = complete_df.groupBy('hour').count('TripID')
+    return total_count, complete_count
+
 def zone_aggregate_process(start_df, end_df, LIMIT):
     top_pickup_df = start_df.groupBy('zone').count().orderBy('count',ascending=False).limit(LIMIT)
     top_dropoff_df = end_df.groupBy('zone').count().orderBy('count',ascending=False).limit(LIMIT)
@@ -86,7 +97,7 @@ def duration_process(complete_df):
     duration_hist_df = complete_df.groupBy('bin').count().orderBy('bin')
     return duration_hist_df
 
-def write_process(top_pickup_df=None, top_dropoff_df=None, duration_hist_df=None):
+def write_process(top_pickup_df, top_dropoff_df, duration_hist_df, total_count_df, complete_count_df):
     def construct_request(df,item_header):
         items = df.toJSON().collect()
         items_dict = {}
@@ -110,29 +121,45 @@ def write_process(top_pickup_df=None, top_dropoff_df=None, duration_hist_df=None
         duration_json = construct_request(df,"duration")
         print(duration_json)
         requests.post("http://localhost:5000/duration",data=duration_json)
+
+    def send_total_count(df,epoch_id):
+        total_json = construct_request(df,"total_count")
+        print(total_json)
+        requests.post("http://localhost:5000/total_count",data=total_json)
+    
+    def send_complete_count(df,epoch_id):
+        complete_json = construct_request(df,"complete_count")
+        print(complete_json)
+        requests.post("http://localhost:5000/complete_count",data=complete_json)
         
-    if top_pickup_df:
-        top_pickup_stream = top_pickup_df.writeStream \
-            .outputMode("complete") \
-            .foreachBatch(send_top_pickup_regions) \
-            .start()
-    if top_dropoff_df:
-        top_dropoff_stream = top_dropoff_df.writeStream \
-            .outputMode("complete") \
-            .foreachBatch(send_top_dropoff_regions) \
-            .start()
-    if duration_hist_df:
-        duration_stream = duration_hist_df.writeStream \
-            .outputMode("complete") \
-            .foreachBatch(send_duration) \
-            .start()
+    top_pickup_stream = top_pickup_df.writeStream \
+        .outputMode("complete") \
+        .foreachBatch(send_top_pickup_regions) \
+        .start()
+    top_dropoff_stream = top_dropoff_df.writeStream \
+        .outputMode("complete") \
+        .foreachBatch(send_top_dropoff_regions) \
+        .start()
+    duration_stream = duration_hist_df.writeStream \
+        .outputMode("complete") \
+        .foreachBatch(send_duration) \
+        .start()
+    total_count_stream = total_count_df.writeStream \
+        .outputMode("complete") \
+        .foreachBatch(send_total_count) \
+        .start()
+    complete_count_stream = complete_count_df.writeStream \
+        .outputMode("complete") \
+        .foreachBatch(send_complete_count) \
+        .start()
     spark.streams.awaitAnyTermination()
 
 def main():
     start_df, end_df, complete_df = read_process()
     top_pickup_df, top_dropoff_df = zone_aggregate_process(start_df, end_df, 10)
     duration_hist_df = duration_process(complete_df)
-    write_process(top_pickup_df,top_dropoff_df,duration_hist_df)
+    total_count_df, complete_count_df = count_process(start_df,complete_df)
+    write_process(top_pickup_df,top_dropoff_df,duration_hist_df,total_count_df,complete_count_df)
 
 if __name__ == '__main__':
     BATCH_INTERVAL = 2

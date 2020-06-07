@@ -1,5 +1,6 @@
 <head>
-    <meta charset="utf-8" />
+    <!-- <meta charset="utf-8" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NYC Taxi Trip Records</title>
     <!-- import plugin script -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -13,226 +14,281 @@
      </script>
 
 </head>
-<body onload = "JavaScript:AutoRefresh(1000);">
-    <div style="height: 20%">
-        <div style="width: 30%; float:left; text-align: left;  margin:10px">
-            <h2>NYC Taxi Trip Records</h2>
+<!-- <body onload = "JavaScript:AutoRefresh(1000);"> -->
+<body>
+    <div style="height: 20vh; padding: 1em 1em 1em 1em; ">
+        <div style="width: 30%; float:left; text-align: left;  margin:10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">
+            <h2 style="font-size:2vw; color:darkslategray">NYC Taxi Trip Records</h2>
         </div>
-        <div style="width: 30%; float:left; text-align: left; margin:10px">
-            <h2>Completed trips: </h2>
+        <div style="width: 30%; float:left; text-align: left;  margin:10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">
+            <h3 style="font-size:1.5vw; color:gray">Completed trips: </h2>
         </div>
-        <div style="width: 30%; float:left; text-align: left; margin:10px">
-            <h2>Ongoing trips: </h2>
-        </div>
-    </div>
-    <div style="height: 40%">
-        <div style="width: 45%; float:left; margin:10px;">
-            <canvas id="top_pickup" width="50" height="50"></canvas>
-            <script>
-                var chartData = {
-                    labels : [{% for item in top_pickup_zones %}
-                                "{{item}}",
-                                {% endfor %}],
-                    datasets : [{
-                        label: 'Top pickup zones',
-                        fill: true,
-                        lineTension: 0.1,
-                        backgroundColor: "rgba(75,192,192,0.4)",
-                        borderColor: "rgba(75,192,192,1)",
-                        borderCapStyle: 'butt',
-                        borderDash: [],
-                        borderDashOffset: 0.0,
-                        borderJoinStyle: 'miter',
-                        pointBorderColor: "rgba(75,192,192,1)",
-                        pointBackgroundColor: "#fff",
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                        pointHoverBorderColor: "rgba(220,220,220,1)",
-                        pointHoverBorderWidth: 2,
-                        pointRadius: 1,
-                        pointHitRadius: 10,
-                        data : [{% for item in top_pickup_zones_counts %}
-                                    {{item}},
-                                {% endfor %}],
-                        spanGaps: false
-                    }]
-                    }
-                    
-                    // get chart canvas
-                    var ctx = document.getElementById("top_pickup").getContext("2d");
-                    
-                    // create the chart using the chart canvas
-                    var myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: chartData,
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            }
-                        }
-                    });
-            </script>
-        </div>
-        <div style="width: 45%; float:left; margin:10px;">
-            <canvas id="top_dropoff" width="50" height="50"></canvas>
-            <script>
-                var chartData = {
-                    labels : [{% for item in top_dropoff_zones %}
-                                "{{item}}",
-                                {% endfor %}],
-                    datasets : [{
-                        label: 'Top dropoff zones',
-                        fill: true,
-                        lineTension: 0.1,
-                        backgroundColor: "rgba(75,192,192,0.4)",
-                        borderColor: "rgba(75,192,192,1)",
-                        borderCapStyle: 'butt',
-                        borderDash: [],
-                        borderDashOffset: 0.0,
-                        borderJoinStyle: 'miter',
-                        pointBorderColor: "rgba(75,192,192,1)",
-                        pointBackgroundColor: "#fff",
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                        pointHoverBorderColor: "rgba(220,220,220,1)",
-                        pointHoverBorderWidth: 2,
-                        pointRadius: 1,
-                        pointHitRadius: 10,
-                        data : [{% for item in top_dropoff_zones_counts %}
-                                    {{item}},
-                                {% endfor %}],
-                        spanGaps: false
-                    }]
-                    }
-                    
-                    // get chart canvas
-                    var ctx = document.getElementById("top_dropoff").getContext("2d");
-                    
-                    // create the chart using the chart canvas
-                    var myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: chartData,
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            }
-                        }
-                    });
-            </script>
+        <div style="width: 30%; float:left; text-align: left;  margin:10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">
+            <h3 style="font-size: 1.5vw; color: gray">Ongoing trips: </h2>
         </div>
     </div>
-    <div style="height: 40%">
-        <div style="width: 70%; float:left; margin:10px;">
-            <canvas id="duration" width="50" height="50"></canvas>
-            <script>
-                var chartData = {
-                    labels : ["< 5 min","5-10 min","10-15 min","15-20 min","20-25 min","25-30 min","30-35 min","35-40 min","40-45 min","45-50 min","50-55 min","55-60 min","> 60 min"],
-                    datasets : [{
-                        label: 'Trip duration distribution',
-                        fill: true,
-                        lineTension: 0.1,
-                        backgroundColor: "rgba(75,192,192,0.4)",
-                        borderColor: "rgba(75,192,192,1)",
-                        borderCapStyle: 'butt',
-                        borderDash: [],
-                        borderDashOffset: 0.0,
-                        borderJoinStyle: 'miter',
-                        pointBorderColor: "rgba(75,192,192,1)",
-                        pointBackgroundColor: "#fff",
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                        pointHoverBorderColor: "rgba(220,220,220,1)",
-                        pointHoverBorderWidth: 2,
-                        pointRadius: 1,
-                        pointHitRadius: 10,
-                        data : [{% for item in duration_counts %}
-                                    {{item}},
-                                {% endfor %}],
-                        spanGaps: false
-                    }]
-                    }
-                    
-                    // get chart canvas
-                    var ctx = document.getElementById("duration").getContext("2d");
-                    
-                    // create the chart using the chart canvas
-                    var myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: chartData,
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            }
+
+    <div style="padding: 1em 3em 3em 3em; ">
+        <section style="display: -webkit-flex; display:flex; -webkit-flex-wrap:wrap; flex-wrap:wrap; position: relative; margin: -2.5em 0 0 -2.5em;">
+            <div style="padding: 0em 0em 3em 0em;  width: calc(80% - 2.5em); margin: 2.5em 0 0 2.5em;">
+                <canvas id="timeseries" width="50" height="20"></canvas>
+                <script>
+                    var chartData = {
+                        // labels : [{% for item in time_bins %}
+                        //             "{{item}}",
+                        //             {% endfor %}],
+                        labels : ['0000-0100','0100-0200','0200-0300','0300-0400','0400-0500',
+                        '0500-0600','0600-0700','0700-0800','0800-0900','0900-1000',
+                        '1000-1100','1100-1200','1200-1300','1300-1400','1400-1500',
+                        '1500-1600','1600-1700','1700-1800','1800-1900','1900-2000',
+                        '2000-2100','2100-2200','2200-2300','2300-2359'],
+                        datasets : [{
+                            label: 'Completed trips',
+                            fill: true,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(75,192,192,0.4)",
+                            borderColor: "rgba(75,192,192,1)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(75,192,192,1)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                            pointHoverBorderColor: "rgba(220,220,220,1)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            data : [{% for item in complete_counts %}
+                                        {{item}},
+                                    {% endfor %}],
+                            // data: [1,5,10,20,50,100,120,125,130,200],
+                            spanGaps: false
+                        },{
+                            label: 'Ongoing trips',
+                            fill: true,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(255,150,152,0.4)",
+                            borderColor: "rgba(255,150,152,1)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(255,150,152,,1)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(255,150,152,2,1)",
+                            pointHoverBorderColor: "rgba(220,220,220,1)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            data : [{% for item in ongoing_counts %}
+                                        {{item}},
+                                    {% endfor %}],
+                            // data: [10,15,25,50,100,200,250,260,300,340],
+                            spanGaps: false
+                        }]
                         }
-                    });
-            </script>
-        </div>
-        <div style="width: 20%; float:left; margin:10px;">
-            <!-- <canvas id="placeholder" width="50" height="50"></canvas>
-            <script>
-                var chartData = {
-                    labels : [{% for item in labels %}
-                                "{{item}}",
-                                {% endfor %}],
-                    datasets : [{
-                        label: '{{ legend }}',
-                        fill: true,
-                        lineTension: 0.1,
-                        backgroundColor: "rgba(75,192,192,0.4)",
-                        borderColor: "rgba(75,192,192,1)",
-                        borderCapStyle: 'butt',
-                        borderDash: [],
-                        borderDashOffset: 0.0,
-                        borderJoinStyle: 'miter',
-                        pointBorderColor: "rgba(75,192,192,1)",
-                        pointBackgroundColor: "#fff",
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                        pointHoverBorderColor: "rgba(220,220,220,1)",
-                        pointHoverBorderWidth: 2,
-                        pointRadius: 1,
-                        pointHitRadius: 10,
-                        data : [{% for item in values %}
-                                    {{item}},
-                                {% endfor %}],
-                        spanGaps: false
-                    }]
-                    }
-                    
-                    // get chart canvas
-                    var ctx = document.getElementById("placeholder").getContext("2d");
-                    
-                    // create the chart using the chart canvas
-                    var myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: chartData,
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
+                        
+                        // get chart canvas
+                        var ctx = document.getElementById("timeseries").getContext("2d");
+                        
+                        // create the chart using the chart canvas
+                        var myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: chartData,
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
                             }
+                        });
+                </script>
+            </div>
+        </section>
+        <section style="display: -webkit-flex; display:flex; -webkit-flex-wrap:wrap; flex-wrap:wrap; position: relative; margin: -2.5em 0 0 -2.5em;">
+            <div style="padding: 0em 0em 3em 0em; width: calc(40% - 2.5em); margin: 2.5em 0 0 2.5em;">
+                <canvas id="top_pickup" width="50" height="40"></canvas>
+                <script>
+                    var gradient = ctx.createLinearGradient(0,0,0,400);
+                    gradient.addColorStop(0, 'rgba(75,192,192,1)');   
+                    gradient.addColorStop(0.5, 'rgba(75,192,192,0.6)');
+                    gradient.addColorStop(1, 'rgba(75,192,192,0.2)');   
+                    var chartData = {
+                        // labels : [{% for item in top_pickup_zones %}
+                        //             "{{item}}",
+                        //             {% endfor %}],
+                        labels: ['1','2','3','4','5'],
+                        datasets : [{
+                            label: 'Top pickup zones',
+                            fill: true,
+                            lineTension: 0.1,
+                            backgroundColor: gradient,
+                            // backgroundColor: "rgba(75,192,192,0.4)",
+                            borderColor: "rgba(75,192,192,1)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(75,192,192,1)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                            pointHoverBorderColor: "rgba(220,220,220,1)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            // data : [{% for item in top_pickup_zones_counts %}
+                            //             {{item}},
+                            //         {% endfor %}],
+                            data: [5,4,3,2,1],
+                            spanGaps: false
+                        }]
                         }
-                    });
-            </script> -->
-        </div>
+                        
+                        // get chart canvas
+                        var ctx = document.getElementById("top_pickup").getContext("2d");
+                        
+                        // create the chart using the chart canvas
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: chartData,
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                </script>
+            </div>
+            <div style="padding: 0em 0em 3em 0em;  width: calc(40% - 2.5em); margin: 2.5em 0 0 2.5em;">
+                <canvas id="top_dropoff" width="50" height="40"></canvas>
+                <script>
+                    var gradient = ctx.createLinearGradient(0,0,0,400);
+                    gradient.addColorStop(0, 'rgba(255,150,152,1)');   
+                    gradient.addColorStop(0.5, 'rgba(255,150,152,0.6)');
+                    gradient.addColorStop(1, 'rgba(255,150,152,0.2)');   
+                    var chartData = {
+                        labels : ['1','2','3','4','5'],
+                        // labels : [{% for item in top_dropoff_zones %}
+                        //             "{{item}}",
+                        //             {% endfor %}],
+                        datasets : [{
+                            label: 'Top dropoff zones',
+                            fill: true,
+                            lineTension: 0.1,
+                            backgroundColor: gradient,
+                            // backgroundColor: "rgba(75,192,192,0.4)",
+                            borderColor: "rgba(255,150,152,1)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(255,150,152,1)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(255,150,152,1)",
+                            pointHoverBorderColor: "rgba(255,150,152,1)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            // data : [{% for item in top_dropoff_zones_counts %}
+                            //             {{item}},
+                            //         {% endfor %}],
+                            data: [5,4,3,2,1],
+                            spanGaps: false
+                        }]
+                        }
+                        
+                        // get chart canvas
+                        var ctx = document.getElementById("top_dropoff").getContext("2d");
+                        
+                        // create the chart using the chart canvas
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: chartData,
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                </script>
+            </div>
+        </section>
+        <section style="display: -webkit-flex; display:flex; -webkit-flex-wrap:wrap; flex-wrap:wrap; position: relative; margin: -2.5em 0 0 -2.5em;">
+            <div style="padding: 0em 0em 3em 0em;  width: calc(80% - 2.5em); margin: 2.5em 0 0 2.5em;">
+                <canvas id="duration" width="50" height="30"></canvas>
+                <script>
+                    var gradient = ctx.createLinearGradient(0,0,0,400);
+                    gradient.addColorStop(0, 'rgba(249,228,183,1)');   
+                    gradient.addColorStop(0.5, 'rgba(249,228,183,0.7)');
+                    gradient.addColorStop(1, 'rgba(249,228,183,0.4)');   
+                    var chartData = {
+                        labels : ["< 5 min","5-10 min","10-15 min","15-20 min","20-25 min","25-30 min","30-35 min","35-40 min","40-45 min","45-50 min","50-55 min","55-60 min","> 60 min"],
+                        datasets : [{
+                            label: 'Trip duration distribution',
+                            fill: true,
+                            lineTension: 0.1,
+                            backgroundColor: gradient,
+                            borderColor: "rgba(30,152,250,1)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(30,152,250,1)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(30,152,250,1)",
+                            pointHoverBorderColor: "rgba(30,152,250,1)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            // data : [{% for item in duration_counts %}
+                            //             {{item}},
+                            //         {% endfor %}],
+                            data: [5,3,3,5,6,1,4,1,0,0,0,0,0],
+                            spanGaps: false
+                        }]
+                        }
+                        
+                        // get chart canvas
+                        var ctx = document.getElementById("duration").getContext("2d");
+                        
+                        // create the chart using the chart canvas
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: chartData,
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                </script>
+            </div>
+        </section>
     </div>
 </body>
