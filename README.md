@@ -29,12 +29,27 @@ The processors send the processed data in the form of JSON objects to a Flask ap
 
 ## Requirements
 
-- Zookeeper
+- Zookeeper 
 - Kafka
 - Go
 - Spark
 - PostgreSQL
+- Flask
 
 ## Usage
+
+# Kafka server setup
+
+  ./kafka/bin/zookeeper-server-start.sh ./kafka/config/zookeeper.properties
+  ./kafka/bin/kafka-server-start.sh ./kafka/config/server.properties'
+  
+
+# Flask app setup
+
+# Consumer setup
+
+# Producer setup
+
+
 
 
