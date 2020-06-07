@@ -39,10 +39,10 @@ The processors send the processed data in the form of JSON objects to a Flask ap
 ## Usage
 
 # Kafka server setup
-
-  ./kafka/bin/zookeeper-server-start.sh ./kafka/config/zookeeper.properties
-  ./kafka/bin/kafka-server-start.sh ./kafka/config/server.properties'
-  
+'''bash
+./kafka/bin/zookeeper-server-start.sh ./kafka/config/zookeeper.properties
+./kafka/bin/kafka-server-start.sh ./kafka/config/server.properties
+'''
 
 # Flask app setup
 
